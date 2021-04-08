@@ -11,5 +11,5 @@ Python web or console based application for generating an abstract (answer + sum
 ### Docker
  - build image: `docker build .`
  - build image by compose: `docker-compose build`
- - run command: `docker-compose run api sh -c "django-admin startproject app ."`
+ - run command: `docker-compose run api sh -c "django-admin [command]"`
  - start environment: `docker-compose up`
