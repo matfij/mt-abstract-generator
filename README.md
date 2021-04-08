@@ -6,10 +6,10 @@ Python web or console based application for generating an abstract (answer + sum
 ### Virtual environment
  - initialization: `py -m venv .venv`
  - starting: `.venv\Scripts\activate`
- - 
+ - installing dependencies: `pip3 install -r requirements.txt`
 
 ### Docker
- - build image: `docker build . -f docker/Dockerfile`
- - build image by compose: `docker-compose build -f docker/docker-compose.yml`
- - run project: `docker-compose up -f docker/docker-compose.yml`
- 
+ - build image: `docker build .`
+ - build image by compose: `docker-compose build`
+ - run command: `docker-compose run api sh -c "django-admin startproject app ."`
+ - start environment: `docker-compose up`
