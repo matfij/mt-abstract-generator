@@ -1,5 +1,5 @@
 # Machine-learning-based abstracting and interpretation of search engine results
-Python web or console based application for generating an abstract (answer + summary) for a user input phrase, based on the text data scraped from the web
+Python web (Django) or console based application for generating an abstract (answer + summary) for a user input phrase, based on the text data scraped from the web (Scrapy).
 
 ## Console lookup
 
@@ -11,5 +11,8 @@ Python web or console based application for generating an abstract (answer + sum
 ### Docker
  - build image: `docker build .`
  - build image by compose: `docker-compose build`
- - run command: `docker-compose run api sh -c "django-admin [command]"`
  - start environment: `docker-compose up`
+
+### Django
+ - run command: `docker-compose run api sh -c "django-admin [command]"`
+ - migrate: `docker-compose run api sh -c "python3 manage.py makemigrations core"`
