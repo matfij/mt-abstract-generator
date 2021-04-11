@@ -1,13 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from core.views import AbstractViewSet, get_related_urls
+from core.views import ResultPageViewSet, get_related_pages
 
 
 router = DefaultRouter()
-router.register('abstract', AbstractViewSet)
-
+router.register('abstract', ResultPageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('core/', get_related_urls),  # /api/core/
+    path('core/pages/', get_related_pages),
 ]

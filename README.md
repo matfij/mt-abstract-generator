@@ -16,3 +16,4 @@ Python web (Django) or console based application for generating an abstract (ans
 ### Django
  - run command: `docker-compose run api sh -c "django-admin [command]"`
  - migrate: `docker-compose run api sh -c "python3 manage.py makemigrations core"`
+ - start local server: `py app/manage.py runserver`
