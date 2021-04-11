@@ -19,6 +19,7 @@ class CoreService():
     @crochet.run_in_reactor
     def get_related_urls(self, phrase: str):
         R.RESULT_PAGES = []
+        R.SPIDER_FINISHED = False
         R.SEARCH_PHRASE = phrase
         dispatcher.connect(self.observe_results, signal=signals.item_scraped)
         self.crawler_runner.crawl(GoogleSpider)

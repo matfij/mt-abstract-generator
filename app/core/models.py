@@ -1,4 +1,4 @@
-from django.db.models import CharField, Model
+from django.db.models import Model, CharField, TextField, FloatField
 from django_mysql.models import ListCharField
 
 
@@ -9,3 +9,5 @@ class ResultPageModel(Model):
         size=50,
         max_length=255*51
     )
+    content = TextField(blank=True, default=None, null=True)
+    quality = FloatField(blank=True, default=None, null=True)

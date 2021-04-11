@@ -23,14 +23,16 @@ def get_related_pages(request):
     service = CoreService()
     service.get_related_urls(phrase)
 
-    while len(R.RESULT_PAGES) < R.TARGET_PAGE_NUMBER:
+    while R.SPIDER_FINISHED == False:
         pass
 
     pages = []
     for page in R.RESULT_PAGES:
         result_page = ResultPageModel(
             url=page['url'], 
-            references=page['references']
+            references=page['references'],
+            content=page['content'],
+            quality=page['quality']
         )
         pages.append(result_page)
 

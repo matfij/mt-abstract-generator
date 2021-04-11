@@ -2,15 +2,16 @@ import scrapy
 from googlesearch import search
 
 from common import repository as R
-from spider import settings as S
+from spider import config as C
 from spider.spider.services.page_processing import PageProcessingSerive
+from spider.spider.services.page_rating import PageRatingService
 
 
 class GoogleSpider(scrapy.Spider):
     name = 'google'
 
     def start_requests(self):
-        page_number = 2 * R.TARGET_PAGE_NUMBER
+        page_number = R.TARGET_PAGE_NUMBER + 5
         searched_phrase = R.SEARCH_PHRASE
 
         result_urls = search(searched_phrase, tld="com", lang="en", num=page_number, stop=page_number)
@@ -21,15 +22,26 @@ class GoogleSpider(scrapy.Spider):
         url = response.url
 
         references = []
-        for tag in S.XPATH_HREF_TAGS:
+        for tag in C.XPATH_HREF_TAGS:
             references.append(response.xpath(tag).getall())
         references = [ref for refs in references for ref in refs] 
         references = PageProcessingSerive.filter_references(url, references)
 
+        content = ''
+        for tag in C.XPATH_MAIN_TAGS:
+            searched_xpath = tag + C.TAG_CONTENT
+            content += PageProcessingSerive.clean_content(response.xpath(searched_xpath).getall())
+        # content = content[:300]
+
+        quality = PageRatingService.get_combined_domains_class(url, references)
+
         yield {
             'url': url,
-            'references': references
+            'references': references,
+            'content': content,
+            'quality': quality
         }
 
     def close(self):
+        R.SPIDER_FINISHED = True
         pass

@@ -6,4 +6,4 @@ class ResultPageSerializer(ModelSerializer):
     
     class Meta:
         model = ResultPageModel
-        fields = ['url', 'references']
+        fields = ['url', 'references', 'content', 'quality']
