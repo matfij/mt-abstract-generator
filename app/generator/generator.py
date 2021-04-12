@@ -1,10 +1,13 @@
+from common.constants import AnswerModel, SummaryModel
 from common import repository as R
+from generator.services.answer import AnswerService
+from generator.services.summary import SummaryService
 
 
 class GeneratorFacade:
 
     @classmethod
-    def generate_abstract(self):
-        R.GENERATOR_ANSWER = 'go on a diet'
-        R.GENERATOR_SUMMARY= 'go on a strict diet, eat fewer calories, burn more fat'
+    def generate_abstract(cls, answer_model: AnswerModel, summary_model: SummaryModel):
+        R.GENERATOR_ANSWER = AnswerService.generate_answer(answer_model)
+        R.GENERATOR_SUMMARY= SummaryService.generate_summary(summary_model)
         R.GENERATOR_FINISHED = True

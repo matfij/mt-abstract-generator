@@ -11,7 +11,7 @@ class GoogleSpider(scrapy.Spider):
     name = 'google'
 
     def start_requests(self):
-        page_number = R.TARGET_PAGE_NUMBER + 5
+        page_number = R.TARGET_PAGE_NUMBER
         searched_phrase = R.SEARCH_PHRASE
 
         result_urls = search(searched_phrase, tld="com", lang="en", num=page_number, stop=page_number)
@@ -31,7 +31,6 @@ class GoogleSpider(scrapy.Spider):
         for tag in C.XPATH_MAIN_TAGS:
             searched_xpath = tag + C.TAG_CONTENT
             content += PageProcessingSerive.clean_content(response.xpath(searched_xpath).getall())
-        # content = content[:300]
 
         quality = PageRatingService.get_combined_domains_class(url, references)
 

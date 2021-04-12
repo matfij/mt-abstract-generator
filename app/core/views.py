@@ -45,9 +45,11 @@ def generate_abstract(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     phrase = body['searchPhrase']
+    answer_model = body['answerModel']
+    summary_model = body['summaryModel']
 
     service = CoreService()
-    service.generate_abstract(phrase)
+    service.generate_abstract(phrase, answer_model, summary_model)
 
     while R.GENERATOR_FINISHED == False:
         pass
