@@ -48,7 +48,7 @@ class PageProcessingSerive:
         filler_tokens = [
             u"\n", u"\t", u"\r", u"\"", "  ", "    ",
             '+', '<', '[', ',', '>', ']', '&', '—', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
-            '--', '...', ';', ':'
+            '--', '...', ';', ':', '^'
         ]
         for token in filler_tokens:
             content = content.replace(token, '')

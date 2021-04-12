@@ -11,3 +11,8 @@ class ResultPageModel(Model):
     )
     content = TextField(blank=True, default=None, null=True)
     quality = FloatField(blank=True, default=None, null=True)
+
+
+class AbstractModel(Model):
+    answer = TextField(max_length=511)
+    summary = TextField(max_length=4095)

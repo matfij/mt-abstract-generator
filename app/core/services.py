@@ -7,6 +7,7 @@ from scrapy.signalmanager import dispatcher
 from common import repository as R
 from core.models import ResultPageModel
 from spider.spider.spiders.google import GoogleSpider
+from generator.generator import GeneratorFacade
 
 
 crochet.setup()
@@ -21,8 +22,17 @@ class CoreService():
         R.RESULT_PAGES = []
         R.SPIDER_FINISHED = False
         R.SEARCH_PHRASE = phrase
+
         dispatcher.connect(self.observe_results, signal=signals.item_scraped)
         self.crawler_runner.crawl(GoogleSpider)
 
     def observe_results(self, item: dict):
         R.RESULT_PAGES.append(dict(item))
+
+    def generate_abstract(self, phrase: str):
+        R.GENERATOR_ANSWER = ''
+        R.GENERATOR_SUMMARY = ''
+        R.GENERATOR_FINISHED = False
+        R.SEARCH_PHRASE = phrase
+
+        GeneratorFacade.generate_abstract()
