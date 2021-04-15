@@ -4,25 +4,24 @@ from scrapy import signals
 from scrapy.crawler import CrawlerRunner
 from scrapy.signalmanager import dispatcher
 
-from common.constants import AnswerModel, SummaryModel
 from common import repository as R
-from core.models import ResultPageModel
+from core.models import AbstractModel
 from spider.spider.spiders.google import GoogleSpider
-from generator.generator import GeneratorFacade
+from generator.facade import GeneratorFacade, AnswerModel, SummaryModel
 
 
 crochet.setup()
 
 
 class CoreService():
-    '''Core application service for retrieving and processing scraped data'''
     crawler_runner = CrawlerRunner()
 
     @crochet.run_in_reactor
-    def get_related_urls(self, phrase: str):
+    def get_related_pages(self, phrase: str, page_number: int):
         R.RESULT_PAGES = []
         R.SPIDER_FINISHED = False
         R.SEARCH_PHRASE = phrase
+        R.TARGET_PAGE_NUMBER = page_number
 
         dispatcher.connect(self.observe_results, signal=signals.item_scraped)
         self.crawler_runner.crawl(GoogleSpider)
@@ -30,14 +29,20 @@ class CoreService():
     def observe_results(self, item: dict):
         R.RESULT_PAGES.append(dict(item))
 
-    def generate_abstract(self, phrase: str, answer_model: AnswerModel, summary_model: SummaryModel):
-        self.get_related_urls(phrase)
+    def generate_abstract(self, phrase: str, page_number: int, answer_model: AnswerModel, summary_model: SummaryModel) -> AbstractModel:
+        self.get_related_pages(phrase, page_number)
 
-        R.GENERATOR_ANSWER = ''
-        R.GENERATOR_SUMMARY = ''
-        R.GENERATOR_FINISHED = False
-
-        while R.SPIDER_FINISHED == False:
+        while not R.SPIDER_FINISHED:
             pass
 
-        GeneratorFacade.generate_abstract(answer_model, summary_model)
+        corpus = [page['content'] for page in R.RESULT_PAGES]
+        R.RESULT_PAGES = []
+
+        answer, summary = GeneratorFacade.generate_abstract(phrase, corpus, answer_model, summary_model)
+
+        abstract = AbstractModel(
+            answer=answer,
+            summary=summary
+        )
+
+        return abstract
