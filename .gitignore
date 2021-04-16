@@ -156,3 +156,4 @@ htmlcov/
 # Locals
 env
 .google-cookie
+app/common/data/*

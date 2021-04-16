@@ -1,6 +1,8 @@
 import re
 from typing import List
 
+from spider.spider.services.page_processing import PageProcessingSerive
+
 
 class PageRatingService:
 
@@ -20,11 +22,11 @@ class PageRatingService:
     @classmethod
     def get_combined_domains_class(self, url: str, references: List[str]) -> float:
         desired_domains = [
-            'org', 'int', 'edu', 'gov', 'mil', 'eu', 'us', 'wki', 'review'
+            'org', 'int', 'edu', 'gov', 'mil', 'eu', 'us', 'wiki', 'review'
         ]
         average_domains = [
             'com', 'net', 'ai', 'au', 'ca', 'academy', 'cern', 'clinic', 'codes', 'health',
-            'management', 'media', 'mobi', 'tech', 'technology', 'study'
+            'management', 'media', 'mobi', 'tech', 'technology', 'study', 'co'
         ]
         page_domain = self.get_domain(url)
 
@@ -42,7 +44,7 @@ class PageRatingService:
             if True in [(ref_part in page_domain) for ref_part in ref.split('.')]:
                 gain = 0.1
             try:
-                if sum(preprocessing.get_url_body(ref) in h for h in refs) > 1:
+                if sum(PageProcessingSerive.get_url_body(ref) in h for h in references) > 1:
                     gain = 0.1
             except:
                 pass

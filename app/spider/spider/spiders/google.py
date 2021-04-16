@@ -34,12 +34,13 @@ class GoogleSpider(scrapy.Spider):
 
         quality = PageRatingService.get_combined_domains_class(url, references)
 
-        yield {
-            'url': url,
-            'references': references,
-            'content': content,
-            'quality': quality
-        }
+        if (C.CONTENT_LOW_LIMIT < len(content) < C.CONTENT_HIGH_LIMIT):
+            yield {
+                'url': url,
+                'references': references,
+                'content': content,
+                'quality': quality
+            }
 
     def close(self):
         R.SPIDER_FINISHED = True

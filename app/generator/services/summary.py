@@ -9,7 +9,10 @@ class SummaryService:
     @classmethod
     def generate_summary(cls, corpus: List[str], summary_model: SummaryModel) -> str:
         if summary_model == SummaryModel.DISTILBART.value:
-            return cls.run_distilbart(cls, corpus)
+            try:
+                return cls.run_distilbart(cls, corpus)
+            except:
+                return 'model ettot'
         else:
             return ''
 
@@ -17,9 +20,13 @@ class SummaryService:
         context = ''
         for text in corpus:
             context += text
+
+        context = context.replace('-', ' ')
+        context = context.replace(';', ' ')
         
-        summarization_pipeline = pipeline(task='summarization', model='app/generator/models/distilbart')
-        maximum_sequence_length = 512
+        summarization_pipeline = pipeline(task='summarization', model='app/generator/models/summary/distilbart')
+        maximum_sequence_length = 356  # maximum encoder length = 512
+        
         current_position = 0
         text_words = context.split(' ')
         text_parts = []

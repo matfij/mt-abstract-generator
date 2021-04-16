@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 
-# TAGS
+# SCRAPING
 TAG_CONTENT = 'text()'
 XPATH_HREF_TAGS = [
     '//a/@href'
@@ -19,10 +19,6 @@ XPATH_MAIN_TAGS = [
 ]
 
 # PROCESSING
-CONTENT_LOW_LIMIT = 400
+SPAN_MIN_LENGTH = 200
+CONTENT_LOW_LIMIT = 500
 CONTENT_HIGH_LIMIT = 10000
-
-# FILES
-DATA_FILE = 'app/common/data/data.json'
-RESULT_FILE = 'app/common/data/results.csv'
-RATED_DATA_FILE = 'app/common/data/rated_data.json'

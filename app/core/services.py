@@ -1,4 +1,6 @@
+import os
 from typing import List
+import dotenv
 import crochet
 from scrapy import signals
 from scrapy.crawler import CrawlerRunner
@@ -35,6 +37,9 @@ class CoreService():
         while not R.SPIDER_FINISHED:
             pass
 
+        if int(os.getenv('DEBUG', default=0)) == 1:
+            self.save_data(phrase, R.RESULT_PAGES)
+
         corpus = [page['content'] for page in R.RESULT_PAGES]
         R.RESULT_PAGES = []
 
@@ -46,3 +51,7 @@ class CoreService():
         )
 
         return abstract
+
+    def save_data(self, phrase: str, pages: dict):
+        with open('app/common/data/pages.json', 'w') as file:
+            file.write(str(pages))
