@@ -1,4 +1,5 @@
 import os
+import gc
 from typing import List
 import dotenv
 import crochet
@@ -20,8 +21,6 @@ class CoreService():
 
     @crochet.run_in_reactor
     def get_related_pages(self, phrase: str, page_number: int):
-        R.RESULT_PAGES = []
-        R.SPIDER_FINISHED = False
         R.SEARCH_PHRASE = phrase
         R.TARGET_PAGE_NUMBER = page_number
 
@@ -32,6 +31,7 @@ class CoreService():
         R.RESULT_PAGES.append(dict(item))
 
     def generate_abstract(self, phrase: str, page_number: int, answer_model: AnswerModel, summary_model: SummaryModel) -> AbstractModel:
+        self.cleanup()
         self.get_related_pages(phrase, page_number)
 
         while not R.SPIDER_FINISHED:
@@ -41,17 +41,23 @@ class CoreService():
             self.save_data(phrase, R.RESULT_PAGES)
 
         corpus = [page['content'] for page in R.RESULT_PAGES]
-        R.RESULT_PAGES = []
 
         answer, summary = GeneratorFacade.generate_abstract(phrase, corpus, answer_model, summary_model)
-
         abstract = AbstractModel(
             answer=answer,
             summary=summary
         )
 
+        self.cleanup()
+
         return abstract
 
-    def save_data(self, phrase: str, pages: dict):
-        with open('app/common/data/pages.json', 'w') as file:
+    def cleanup(self):
+        R.SPIDER_FINISHED = False
+        R.RESULT_PAGES = []
+        gc.collect()
+        
+    def save_data(self, phrase: str, pages: List[dict]):
+        base_dir = os.getenv('BASE_DIR')
+        with open(base_dir+'common/data/pages.json', 'w') as file:
             file.write(str(pages))

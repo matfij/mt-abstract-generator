@@ -22,26 +22,18 @@ class PageRatingService:
 
     @classmethod
     def get_combined_domains_class(cls, url: str, references: List[str]) -> float:
-        desired_domains = [
-            'org', 'int', 'edu', 'gov', 'mil', 'eu', 'us', 'wiki', 'review'
-        ]
-        average_domains = [
-            'com', 'net', 'ai', 'au', 'ca', 'academy', 'cern', 'clinic', 'codes', 'health',
-            'management', 'media', 'mobi', 'tech', 'technology', 'study', 'co'
-        ]
         page_domain = cls.get_domain(url)
 
         combained_domains_class = 0
-        if any(page_domain == desired_domain for desired_domain in desired_domains):
+        if any(page_domain == desired_domain for desired_domain in C.DESIRED_DOMAINS):
             combained_domains_class += 50
-        elif any(page_domain == average_domain for average_domain in average_domains):
+        elif any(page_domain == average_domain for average_domain in C.AVERAGE_DOMAINS):
             combained_domains_class += 30
         else:
             combained_domains_class -= 10
 
         for ref in references:
             gain = 1
-
             if True in [(ref_part in page_domain) for ref_part in ref.split('.')]:
                 gain = 0.1
             try:
@@ -49,14 +41,12 @@ class PageRatingService:
                     gain = 0.1
             except:
                 pass
-
-            if any(desired_domain in ref for desired_domain in desired_domains):
+            if any(desired_domain in ref for desired_domain in C.DESIRED_DOMAINS):
                 gain *= 5
-            elif any(average_domain in ref for average_domain in average_domains):
+            elif any(average_domain in ref for average_domain in C.AVERAGE_DOMAINS):
                 gain *= 2
             else:
                 gain *= -3
-
             combained_domains_class += gain
 
         return combained_domains_class

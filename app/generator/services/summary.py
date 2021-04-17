@@ -1,3 +1,4 @@
+import os
 from typing import List
 from transformers import pipeline
 
@@ -5,6 +6,7 @@ from generator.constants import SummaryModel
 
 
 class SummaryService:
+    __BASE_MODEL_DIR = os.getenv('BASE_DIR') + 'generator/models/summary/'
 
     @classmethod
     def generate_summary(cls, corpus: List[str], summary_model: SummaryModel) -> str:
@@ -24,7 +26,7 @@ class SummaryService:
         context = context.replace('-', ' ')
         context = context.replace(';', ' ')
         
-        summarization_pipeline = pipeline(task='summarization', model='app/generator/models/summary/distilbart')
+        summarization_pipeline = pipeline('summarization', self.__BASE_MODEL_DIR + 'distilbart')
         maximum_sequence_length = 356  # maximum encoder length = 512
         
         current_position = 0

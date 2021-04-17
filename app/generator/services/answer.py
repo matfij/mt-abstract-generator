@@ -1,3 +1,4 @@
+import os
 from typing import List
 import torch
 import transformers
@@ -7,6 +8,7 @@ from generator.constants import AnswerModel
 
 
 class AnswerService:
+    __BASE_MODEL_DIR = os.getenv('BASE_DIR') + 'generator/models/answer/'
 
     @classmethod
     def generate_answer(cls, phrase: str, corpus: List[str], answer_model: AnswerModel) -> str:
@@ -34,8 +36,9 @@ class AnswerService:
             context_parts.append(' '.join(context_words[current_position : current_position + maximum_sequence_length]))
             current_position += maximum_sequence_length
 
-        tokenizer = AutoTokenizer.from_pretrained('app/generator/models/answer/bert')
-        model = AutoModelForQuestionAnswering.from_pretrained('app/generator/models/answer/bert')
+
+        tokenizer = AutoTokenizer.from_pretrained(self.__BASE_MODEL_DIR + 'bert')
+        model = AutoModelForQuestionAnswering.from_pretrained(self.__BASE_MODEL_DIR + 'bert')
 
         answer = ''
         max_score = 0
