@@ -11,10 +11,10 @@ class GoogleSpider(scrapy.Spider):
     name = 'google'
 
     def start_requests(self):
-        page_number = R.TARGET_PAGE_NUMBER
+        page_number = min(max(C.MIN_PAGE_NUMBER, R.TARGET_PAGE_NUMBER), C.MAX_PAGE_NUMBER)
         searched_phrase = R.SEARCH_PHRASE
 
-        result_urls = search(searched_phrase, tld="com", lang="en", num=page_number, stop=page_number)
+        result_urls = search(searched_phrase, num=page_number, stop=page_number, pause=0.0)
         for ind, url in enumerate(result_urls):
             yield scrapy.Request(url)
 
@@ -34,14 +34,14 @@ class GoogleSpider(scrapy.Spider):
 
         quality = PageRatingService.get_combined_domains_class(url, references)
 
-        if (C.CONTENT_LOW_LIMIT < len(content) < C.CONTENT_HIGH_LIMIT):
+        if (C.CONTENT_MIN_LIMIT < len(content) < C.CONTENT_MAX_LIMIT):
             yield {
                 'url': url,
                 'references': references,
-                'content': content,
-                'quality': quality
+                'quality': quality,
+                'content': content
             }
 
     def close(self):
+        R.RESULT_PAGES = PageRatingService.get_best_pages(R.RESULT_PAGES)
         R.SPIDER_FINISHED = True
-        pass

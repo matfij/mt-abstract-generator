@@ -1,5 +1,6 @@
 import re
 from typing import List
+from unidecode import unidecode
 
 from spider import config as C
 
@@ -45,7 +46,7 @@ class PageProcessingSerive:
     def clean_content(cls, spans: List[str]) -> str:
         content = ''
 
-        disallowed_tokens = ['/', '<']
+        disallowed_tokens = ['/', '<', '>']
 
         for span in spans:
             if len(span) > C.SPAN_MIN_LENGTH and not any(d in span for d in disallowed_tokens):
@@ -71,4 +72,4 @@ class PageProcessingSerive:
         )
         content = filler_patterns.sub(r'', content)
 
-        return content
+        return unidecode(content)

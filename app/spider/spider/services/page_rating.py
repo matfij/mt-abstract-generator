@@ -1,13 +1,14 @@
 import re
 from typing import List
 
+from spider import config as C
 from spider.spider.services.page_processing import PageProcessingSerive
 
 
 class PageRatingService:
 
     @classmethod
-    def get_domain(self, url: str) -> str:
+    def get_domain(cls, url: str) -> str:
         protocol_ind = url.index('//') + 2
         if protocol_ind:
             url = url[protocol_ind:]
@@ -20,7 +21,7 @@ class PageRatingService:
             return ''
 
     @classmethod
-    def get_combined_domains_class(self, url: str, references: List[str]) -> float:
+    def get_combined_domains_class(cls, url: str, references: List[str]) -> float:
         desired_domains = [
             'org', 'int', 'edu', 'gov', 'mil', 'eu', 'us', 'wiki', 'review'
         ]
@@ -28,7 +29,7 @@ class PageRatingService:
             'com', 'net', 'ai', 'au', 'ca', 'academy', 'cern', 'clinic', 'codes', 'health',
             'management', 'media', 'mobi', 'tech', 'technology', 'study', 'co'
         ]
-        page_domain = self.get_domain(url)
+        page_domain = cls.get_domain(url)
 
         combained_domains_class = 0
         if any(page_domain == desired_domain for desired_domain in desired_domains):
@@ -59,3 +60,16 @@ class PageRatingService:
             combained_domains_class += gain
 
         return combained_domains_class
+
+    @classmethod
+    def get_best_pages(cls, pages: List[dict]) -> List[dict]:
+        sorted_pages = sorted(pages, key=lambda p: p['quality'], reverse=True)
+
+        total_content_length = 0
+        best_pages = []
+        for page in sorted_pages:
+            total_content_length += len(page['content'])
+            if total_content_length < C.TOTAL_CONTENT_MAX_LIMIT:
+                best_pages.append(page)
+
+        return best_pages
