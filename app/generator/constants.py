@@ -2,8 +2,10 @@ from enum import Enum
 
 
 class AnswerModel(Enum):
-    ROBERTA = 1
+    SPAN_BERT_SQUAD = 1
+    ELECTRA_SQUAD = 2
 
 
 class SummaryModel(Enum):
-    DISTILBART = 1
+    DISTILL_BART_CNN = 1
+    DISTILL_PEGASUS_CNN = 2
