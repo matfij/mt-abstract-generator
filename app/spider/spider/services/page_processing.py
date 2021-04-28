@@ -51,7 +51,6 @@ class PageProcessingSerive:
         for span in spans:
             if len(span) > C.SPAN_MIN_LENGTH and not any(d in span for d in disallowed_tokens):
                 content += ' ' + span
-        content = content.replace('  ', ' ')
         
         filler_tokens = [
             u"\n", u"\t", u"\r", u"\"", "  ", "    ",
@@ -71,5 +70,7 @@ class PageProcessingSerive:
             "]+", flags=re.UNICODE
         )
         content = filler_patterns.sub(r'', content)
+
+        content = content.replace('  ', ' ').strip()
 
         return unidecode(content)

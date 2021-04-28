@@ -9,3 +9,5 @@ tokenizers==0.9.4
 transformers==4.1.1
 Unidecode==1.2.0
 sentencepiece==0.1.95
+spacy==2.3.5
+pytextrank==2.0.3
