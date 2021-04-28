@@ -46,8 +46,9 @@ class PageProcessingSerive:
     def clean_content(cls, spans: List[str]) -> str:
         content = ''
 
-        disallowed_tokens = ['/', '<', '>']
-
+        disallowed_tokens = [
+            '//', '<<', '>>', '\\\\'
+        ]
         for span in spans:
             if len(span) > C.SPAN_MIN_LENGTH and not any(d in span for d in disallowed_tokens):
                 content += ' ' + span
@@ -55,7 +56,7 @@ class PageProcessingSerive:
         filler_tokens = [
             u"\n", u"\t", u"\r", u"\"", "  ", "    ",
             '+', '<', '[', ',', '>', ']', '&', '—', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
-            '--', '...', ';', ':', '^', '//'
+            '--', '...', ';', ':', '^', '//', '\\'
         ]
         for token in filler_tokens:
             content = content.replace(token, '')
