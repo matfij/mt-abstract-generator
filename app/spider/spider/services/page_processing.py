@@ -46,19 +46,11 @@ class PageProcessingSerive:
     def clean_content(cls, spans: List[str]) -> str:
         content = ''
 
-        disallowed_tokens = [
-            '//', '<<', '>>', '\\\\'
-        ]
         for span in spans:
-            if len(span) > C.SPAN_MIN_LENGTH and not any(d in span for d in disallowed_tokens):
+            if len(span) > C.SPAN_MIN_LENGTH and not any(d in span for d in C.DISALLOWED_TOKENS):
                 content += ' ' + span
         
-        filler_tokens = [
-            u"\n", u"\t", u"\r", u"\"", "  ", "    ",
-            '+', '<', '[', ',', '>', ']', '&', '—', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
-            '--', '...', ';', ':', '^', '//', '\\'
-        ]
-        for token in filler_tokens:
+        for token in C.FILLER_TOKENS:
             content = content.replace(token, '')
 
         filler_patterns = re.compile("["
@@ -69,7 +61,7 @@ class PageProcessingSerive:
             u"\U00002702-\U000027B0"
             u"\U000024C2-\U0001F251"
             "]+", flags=re.UNICODE
-        )
+        ) 
         content = filler_patterns.sub(r'', content)
 
         content = content.replace('  ', ' ').strip()

@@ -16,6 +16,14 @@ SPAN_MIN_LENGTH = 125
 CONTENT_MIN_LIMIT = 2000
 CONTENT_MAX_LIMIT = 15000
 TOTAL_CONTENT_MAX_LIMIT = 75000
+DISALLOWED_TOKENS = [
+    '//', '<<', '>>', '\\\\'
+]
+FILLER_TOKENS = [
+    u"\n", u"\t", u"\r", u"\"", "  ", "    ",
+    '+', '<', '[', ',', '>', ']', '&', '—', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
+    '--', '...', ';', ':', '^', '//', '\\'
+]
 
 # RATING
 DESIRED_DOMAINS = [

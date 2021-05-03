@@ -11,3 +11,4 @@ Unidecode==1.2.0
 sentencepiece==0.1.95
 spacy==2.3.5
 pytextrank==2.0.3
+gunicorn==20.1.0
