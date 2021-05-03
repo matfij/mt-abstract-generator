@@ -17,3 +17,8 @@ Python web (Django) or console based application for generating an abstract (ans
  - run command: `docker-compose run api sh -c "django-admin [command]"`
  - migrate: `docker-compose run api sh -c "python3 manage.py makemigrations core"`
  - start local server: `py app/manage.py runserver`
+
+## Gunicorn
+ - Worker class: `gthread` 
+ - Number of workers should be adjusted to the device: `(2 x $num_cores) + 1`
+ 

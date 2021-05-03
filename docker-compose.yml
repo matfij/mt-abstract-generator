@@ -9,4 +9,16 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "gunicorn api.wsgi -b 0.0.0.0:${PORT} ${GUNICORN_CMD_ARGS}"
+      sh -c "
+      python3 manage.py makemigrations &&
+      python3 manage.py migrate core &&
+      python3 manage.py migrate polls &&
+      gunicorn api.wsgi -b 0.0.0.0:${PORT} ${GUNICORN_CMD_ARGS}"
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - CRYPTOGRAPHY_DONT_BUILD_RUST=${CRYPTOGRAPHY_DONT_BUILD_RUST}
+      - BASE_DIR=${BASE_DIR}
+      - GUNICORN_CMD_ARGS=${GUNICORN_CMD_ARGS}
+      - PORT=${PORT}
