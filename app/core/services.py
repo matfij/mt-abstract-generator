@@ -8,7 +8,7 @@ from scrapy.crawler import CrawlerRunner
 from scrapy.signalmanager import dispatcher
 
 from common import repository as R
-from core.models import AbstractModel
+from core.models import GenerateAbstractParams, AbstractModel
 from spider.spider.spiders.google import GoogleSpider
 from generator.facade import GeneratorFacade, AnswerModel, SummaryModel
 
@@ -30,19 +30,19 @@ class CoreService():
     def observe_results(self, item: dict):
         R.RESULT_PAGES.append(dict(item))
 
-    def generate_abstract(self, phrase: str, page_number: int, answer_model: AnswerModel, summary_model: SummaryModel) -> AbstractModel:
+    def generate_abstract(self, params: GenerateAbstractParams) -> AbstractModel:
         self.cleanup()
-        self.get_related_pages(phrase, page_number)
+        self.get_related_pages(params.phrase, params.page_number)
 
         while not R.SPIDER_FINISHED:
             pass
 
         if int(os.getenv('DEBUG', default=0)) == 1:
-            self.save_data(phrase, R.RESULT_PAGES)
+            self.save_data(params.phrase, R.RESULT_PAGES)
 
         corpus = [page['content'] for page in R.RESULT_PAGES]
 
-        answer, summary = GeneratorFacade.generate_abstract(phrase, corpus, answer_model, summary_model)
+        answer, summary = GeneratorFacade.generate_abstract(params.phrase, corpus, params.answer_model, params.summary_model)
         abstract = AbstractModel(
             answer=answer,
             summary=summary

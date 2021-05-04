@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from core.models import ResultPageModel, AbstractModel
+from core.models import ResultPageModel, AbstractModel, KeyModel
 
 
 class ResultPageSerializer(ModelSerializer):
@@ -14,3 +14,10 @@ class AbstractSerializer(ModelSerializer):
     class Meta:
         model = AbstractModel
         fields = ['answer', 'summary']
+
+
+class KeySerializer(ModelSerializer):
+
+    class Meta:
+        model = KeyModel
+        fields = '__all__'
