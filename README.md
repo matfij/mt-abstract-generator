@@ -1,4 +1,4 @@
-# Machine-learning-based abstracting and interpretation of search engine results
+# Machine-learning-based abstracting and interpretation of search engine results - API
 Python web (Django) or console based application for generating an abstract (answer + summary) for a user input phrase, based on the text data scraped from the web (Scrapy).
 
 ## Console lookup

@@ -35,6 +35,7 @@ class AbstractModel(Model):
 
 class KeyModel(Model):
     key = CharField(max_length=255)
+    tester_name = CharField(max_length=255, null=True)
     active = BooleanField(default=True)
     creation_date = DateTimeField(default=timezone.now)
     use_count = IntegerField(default=0)
