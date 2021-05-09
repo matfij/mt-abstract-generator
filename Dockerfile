@@ -7,6 +7,3 @@ RUN python3 -m spacy download en_core_web_md
 RUN mkdir /app
 WORKDIR /app
 COPY ./app /app
-
-RUN adduser runuser
-USER runuser
