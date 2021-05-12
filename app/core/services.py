@@ -1,8 +1,7 @@
 import os
 import gc
-from typing import List
-import dotenv
 import crochet
+from typing import List
 from scrapy import signals
 from scrapy.crawler import CrawlerRunner
 from scrapy.signalmanager import dispatcher
@@ -57,7 +56,7 @@ class CoreService():
         R.RESULT_PAGES = []
         gc.collect()
         
-    def save_data(self, phrase: str, pages: List[dict]):
+    def save_data(self, pages: List[dict]):
         base_dir = os.getenv('BASE_DIR')
         with open(base_dir+'common/data/pages.json', 'w') as file:
             file.write(str(pages))

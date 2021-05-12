@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin
 
 from common import repository as R
 from core.models import GenerateAbstractParams, ResultPageModel, AbstractModel, KeyModel
@@ -27,7 +27,7 @@ class AbstractView(GenericAPIView, CreateModelMixin):
         return Response(serializer.data)
 
 
-class KeyView(GenericAPIView, CreateModelMixin, ListModelMixin, UpdateModelMixin):
+class KeyView(GenericAPIView, CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin):
     serializer_class = KeySerializer
     queryset = KeyModel.objects.all()
     lookup_field = 'id'
@@ -37,12 +37,16 @@ class KeyView(GenericAPIView, CreateModelMixin, ListModelMixin, UpdateModelMixin
         return self.create(request)
 
     @is_authorized
-    def put(self, request, id=None):
-        return self.update(request, id)
-
-    @is_authorized
     def get(self, request, id=None):
         if id:
             return self.retrieve(None, id=id)
         else:
             return self.list(None)
+
+    @is_authorized
+    def put(self, request, id=None):
+        return self.update(request, id)
+
+    @is_authorized
+    def delete(self, request, id):
+        return self.destroy(request, id)
