@@ -1,5 +1,5 @@
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, DestroyModelMixin
 
 from core.wrappers import is_authorized, key_required
 from polls.models import PollModel
@@ -15,10 +15,15 @@ class PollPublicView(GenericAPIView, CreateModelMixin):
         return self.create(request)
 
 
-class PollAdminView(GenericAPIView, ListModelMixin):
+class PollAdminView(GenericAPIView, ListModelMixin, DestroyModelMixin):
     serializer_class = PollSerializer
     queryset = PollModel.objects.all()
+    lookup_field = 'id'
 
     @is_authorized
     def get(self, request):
         return self.list(None)
+
+    @is_authorized
+    def delete(self, request, id):
+        return self.destroy(request, id)
