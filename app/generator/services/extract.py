@@ -17,7 +17,7 @@ class ExtractService:
         for part in corpus:
             part_summary = ''
             doc = model(part)
-            doc_len_max = round(0.7*len(doc))
+            doc_len_max = round(0.8*len(doc))
             doc_len_min = round(0.2*len(doc))
             
             for sentence in doc._.textrank.summary():
