@@ -36,8 +36,8 @@ class CoreService():
         while not R.SPIDER_FINISHED:
             pass
 
-        if int(os.getenv('DEBUG', default=0)) == 1:
-            self.save_data(params.phrase, R.RESULT_PAGES)
+        # if int(os.getenv('DEBUG', default=0)) == 1:
+        #     self.save_data(params.phrase, R.RESULT_PAGES)
 
         corpus = [page['content'] for page in R.RESULT_PAGES]
 
@@ -57,6 +57,5 @@ class CoreService():
         gc.collect()
         
     def save_data(self, pages: List[dict]):
-        base_dir = os.getenv('BASE_DIR')
-        with open(base_dir+'common/data/pages.json', 'w') as file:
+        with open('pages.json', 'w') as file:
             file.write(str(pages))

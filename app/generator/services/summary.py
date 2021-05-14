@@ -30,11 +30,14 @@ class SummaryService:
 
     def run_distill_bart_cnn(self, corpus: List[str]) -> str:
         summarization_pipeline = pipeline('summarization', self.__BASE_MODEL_DIR + 'distill-bart-cnn')
-        maximum_sequence_length = 356  # maximum encoder length = 512
+        maximum_sequence_length = 400  # maximum encoder length = 512
 
         summary = ''
         for content in corpus:
-            summary += ' ' + summarization_pipeline(content)[0]['summary_text']
+            try:
+                summary += ' ' + summarization_pipeline(content)[0]['summary_text']
+            except:
+                pass
 
         return summary
 
@@ -42,13 +45,16 @@ class SummaryService:
         torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
         tokenizer = PegasusTokenizer.from_pretrained(self.__BASE_MODEL_DIR + 'distill-pegasus-cnn-16-4')
         model = PegasusForConditionalGeneration.from_pretrained(self.__BASE_MODEL_DIR + 'distill-pegasus-cnn-16-4').to(torch_device)
-        maximum_sequence_length = 1024  # maximum encoder length = 2048 (?)
+        maximum_sequence_length = 1600  # maximum encoder length = 2048
 
         summary = ''
         for content in corpus:
-            text_data = [content]
-            batch = tokenizer.prepare_seq2seq_batch(text_data, truncation=True, padding='longest', return_tensors="pt").to(torch_device)
-            summary_encoded = model.generate(**batch)
-            summary += ' ' + tokenizer.batch_decode(summary_encoded, skip_special_tokens=True)[0]
+            try:
+                text_data = [content]
+                batch = tokenizer.prepare_seq2seq_batch(text_data, truncation=True, padding='longest', return_tensors="pt").to(torch_device)
+                summary_encoded = model.generate(**batch)
+                summary += ' ' + tokenizer.batch_decode(summary_encoded, skip_special_tokens=True)[0]
+            except:
+                pass
 
         return summary

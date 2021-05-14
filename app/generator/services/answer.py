@@ -27,7 +27,7 @@ class AnswerService:
 
     def clear_answer(self, answer: str) -> str:
         for token in self.__DISALLOWED_TOKENS:
-            answer.replace(token, '')
+            answer = answer.replace(token, '')
         answer.strip()
 
         return answer

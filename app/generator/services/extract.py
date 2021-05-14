@@ -17,11 +17,14 @@ class ExtractService:
         for part in corpus:
             part_summary = ''
             doc = model(part)
+            doc_len_max = round(0.5*len(doc))
+            doc_len_min = round(0.2*len(doc))
             
             for sentence in doc._.textrank.summary():
-                if len(part_summary) + len(sentence) < C.MAX_CONTENT_LENGTH:
+                if len(part_summary) + len(sentence) < min(doc_len_max, C.MAX_CONTENT_LENGTH):
                     part_summary += str(sentence)
 
-            corpus_extract.append(part_summary)
+            if len(part_summary) > min(doc_len_min, C.MIN_CONTENT_LENGTH):
+                corpus_extract.append(part_summary)
 
         return corpus_extract

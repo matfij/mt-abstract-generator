@@ -15,7 +15,7 @@ class GoogleSpider(scrapy.Spider):
         searched_phrase = R.SEARCH_PHRASE
 
         result_urls = search(searched_phrase, num=page_number, stop=page_number, pause=0.0)
-        for ind, url in enumerate(result_urls):
+        for url in result_urls:
             yield scrapy.Request(url)
 
     def parse(self, response):

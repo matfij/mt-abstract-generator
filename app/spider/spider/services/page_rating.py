@@ -1,4 +1,4 @@
-import re
+from math import sqrt
 from typing import List
 
 from spider import config as C
@@ -53,6 +53,10 @@ class PageRatingService:
 
     @classmethod
     def get_best_pages(cls, pages: List[dict]) -> List[dict]:
+        for ind, page in enumerate(pages):
+            if ind > 1:
+                page['quality'] -= 25 + 5*round(sqrt(ind))
+
         sorted_pages = sorted(pages, key=lambda p: p['quality'], reverse=True)
 
         total_content_length = 0
