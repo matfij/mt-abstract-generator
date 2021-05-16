@@ -4,7 +4,7 @@
   "add_bias_logits": false,
   "add_final_layer_norm": true,
   "architectures": [
-    "PegasusForConditionalGeneration"
+    "PegasusForSummarization"
   ],
   "attention_dropout": 0.1,
   "bos_token_id": 0,

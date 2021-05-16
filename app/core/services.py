@@ -9,7 +9,7 @@ from scrapy.signalmanager import dispatcher
 from common import repository as R
 from core.models import GenerateAbstractParams, AbstractModel
 from spider.spider.spiders.google import GoogleSpider
-from generator.facade import GeneratorFacade, AnswerModel, SummaryModel
+from generator.facade import GeneratorFacade
 
 
 crochet.setup()
@@ -36,9 +36,6 @@ class CoreService():
         while not R.SPIDER_FINISHED:
             pass
 
-        # if int(os.getenv('DEBUG', default=0)) == 1:
-        #     self.save_data(params.phrase, R.RESULT_PAGES)
-
         corpus = [page['content'] for page in R.RESULT_PAGES]
 
         answer, summary = GeneratorFacade.generate_abstract(params.phrase, corpus, params.answer_model, params.summary_model)
@@ -55,7 +52,3 @@ class CoreService():
         R.SPIDER_FINISHED = False
         R.RESULT_PAGES = []
         gc.collect()
-        
-    def save_data(self, pages: List[dict]):
-        with open('pages.json', 'w') as file:
-            file.write(str(pages))

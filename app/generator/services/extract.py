@@ -1,3 +1,4 @@
+import os
 from typing import List
 import spacy
 import pytextrank
@@ -22,9 +23,20 @@ class ExtractService:
             
             for sentence in doc._.textrank.summary():
                 if len(part_summary) + len(sentence) < min(doc_len_max, C.MAX_CONTENT_LENGTH):
-                    part_summary += str(sentence)
+                    part_summary += ' ' + str(sentence)
 
             if len(part_summary) > min(doc_len_min, C.MIN_CONTENT_LENGTH):
+                part_summary = part_summary.strip()
                 corpus_extract.append(part_summary)
 
+        if int(os.getenv('WRITE_FILES', default=0)) == 1:
+            cls.save_data(cls, corpus, corpus_extract)
+
         return corpus_extract
+
+    def save_data(self, pages: List[str], abstracts: List[str]):
+        with open('extracts.json', 'w') as file:
+            file.write(str(abstracts))
+
+        with open('corpus.json', 'w') as file:
+            file.write(str(pages))

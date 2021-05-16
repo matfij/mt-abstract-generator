@@ -1,8 +1,6 @@
 import os
-import re
 from typing import List
 import torch
-import transformers
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 
 from generator import config as C
@@ -15,20 +13,19 @@ class AnswerService:
 
     @classmethod
     def generate_answer(cls, phrase: str, corpus: List[str], answer_model: AnswerModel) -> str:
-        answer = ''
-
-        if answer_model == AnswerModel.SPAN_BERT_SQUAD.value:
-            answer = cls.run_span_bert_squad(cls, phrase, corpus)
-        if answer_model == AnswerModel.ELECTRA_SQUAD.value:
-            answer = cls.run_electra_squad(cls, phrase, corpus)
+        answer = cls.run_span_bert_squad(cls, phrase, corpus) + ' ' + cls.run_electra_squad(cls, phrase, corpus)
+        answer = answer.strip()
         
-        answer = cls.clear_answer(cls, answer)
         return answer
 
     def clear_answer(self, answer: str) -> str:
         for token in self.__DISALLOWED_TOKENS:
             answer = answer.replace(token, '')
-        answer.strip()
+        answer = answer.strip()
+
+        if len(answer) > 0 and answer[len(answer) - 1] != '.': answer += '.'
+
+        answer = answer.capitalize()
 
         return answer
 
@@ -43,7 +40,6 @@ class AnswerService:
                 inputs = tokenizer.encode_plus(phrase, content, add_special_tokens=True, return_tensors='pt')
                 input_ids = inputs['input_ids'].tolist()[0]
 
-                text_tokens = tokenizer.convert_ids_to_tokens(input_ids)
                 answer_start_scores, answer_end_scores = model(**inputs, return_dict=False)
 
                 answer_start = torch.argmax(answer_start_scores)
@@ -58,6 +54,7 @@ class AnswerService:
             except:
                 pass
 
+        answer = self.clear_answer(self, answer)
         return answer
 
     def run_electra_squad(self, phrase: str, corpus: List[str]) -> str:
@@ -71,7 +68,6 @@ class AnswerService:
                 inputs = tokenizer.encode_plus(phrase, content, add_special_tokens=True, return_tensors='pt')
                 input_ids = inputs['input_ids'].tolist()[0]
 
-                text_tokens = tokenizer.convert_ids_to_tokens(input_ids)
                 answer_start_scores, answer_end_scores = model(**inputs, return_dict=False)
 
                 answer_start = torch.argmax(answer_start_scores)
@@ -80,11 +76,11 @@ class AnswerService:
                 temp_answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
                 temp_score = torch.max(answer_start_scores).item() + torch.max(answer_end_scores).item()
 
-                if temp_score > max_score and 1 < len(temp_answer) < 1000:
+                if temp_score > max_score and C.MIN_ANSWER_LENGTH < len(temp_answer) < C.MAX_ANSWER_LENGTH:
                     answer = temp_answer
                     max_score = temp_score
             except:
                 pass
 
+        answer = self.clear_answer(self, answer)
         return answer
-        

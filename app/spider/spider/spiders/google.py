@@ -14,12 +14,13 @@ class GoogleSpider(scrapy.Spider):
         page_number = min(max(C.MIN_PAGE_NUMBER, R.TARGET_PAGE_NUMBER), C.MAX_PAGE_NUMBER)
         searched_phrase = R.SEARCH_PHRASE
 
-        result_urls = search(searched_phrase, num=page_number, stop=page_number, pause=0.0)
+        result_urls = search(searched_phrase, lang='en', num=page_number, stop=page_number, pause=0.0)
         for url in result_urls:
             yield scrapy.Request(url)
 
     def parse(self, response):
         url = response.url
+        domain = PageRatingService.get_domain(url)
 
         references = []
         for tag in C.XPATH_HREF_TAGS:
@@ -34,7 +35,7 @@ class GoogleSpider(scrapy.Spider):
 
         quality = PageRatingService.get_combined_domains_class(url, references)
 
-        if (C.CONTENT_MIN_LIMIT < len(content) < C.CONTENT_MAX_LIMIT):
+        if (C.CONTENT_MIN_LIMIT < len(content) < C.CONTENT_MAX_LIMIT) and C.DISALLOWED_DOMAINS.count(domain) == 0:
             yield {
                 'url': url,
                 'references': references,

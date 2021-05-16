@@ -1,21 +1,18 @@
 import json
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin
 
-from common import repository as R
-from core.models import GenerateAbstractParams, ResultPageModel, AbstractModel, KeyModel
-from core.serializers import ResultPageSerializer, AbstractSerializer, KeySerializer
+from core.models import GenerateAbstractParams, KeyModel
+from core.serializers import AbstractSerializer, KeySerializer
 from core.services import CoreService
-from core.wrappers import is_authorized, key_required
+from core.wrappers import is_authorized
 
 
 class AbstractView(GenericAPIView, CreateModelMixin):
 
-    @key_required
+    # @key_required
     def post(self, request):
         body = json.loads(request.body)
         params = GenerateAbstractParams(body)
