@@ -1,6 +1,4 @@
 import os
-import json
-from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -10,7 +8,7 @@ from core.serializers import KeySerializer
 
 def is_authorized(func):
     def wrapper(*args, **kwargs):
-        secret_key = os.getenv('SECRET_KEY')
+        secret_key = os.getenv('ADMIN_KEY')
         headers = args[0].request.headers
 
         if 'secret-key' in headers and headers['secret-key'] == secret_key:

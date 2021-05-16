@@ -7,7 +7,7 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelM
 from core.models import GenerateAbstractParams, KeyModel
 from core.serializers import AbstractSerializer, KeySerializer
 from core.services import CoreService
-from core.wrappers import is_authorized
+from core.wrappers import is_authorized, key_required
 
 
 class AbstractView(GenericAPIView, CreateModelMixin):
