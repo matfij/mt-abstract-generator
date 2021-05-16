@@ -16,6 +16,7 @@ services:
       gunicorn api.wsgi -b 0.0.0.0:${PORT} ${GUNICORN_CMD_ARGS}"
     environment:
       - SECRET_KEY=${SECRET_KEY}
+      - ADMIN_KEY=${ADMIN_KEY}
       - DEBUG=${DEBUG}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - CRYPTOGRAPHY_DONT_BUILD_RUST=${CRYPTOGRAPHY_DONT_BUILD_RUST}
