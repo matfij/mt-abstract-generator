@@ -1,7 +1,5 @@
-import os
 import gc
 import crochet
-from typing import List
 from scrapy import signals
 from scrapy.crawler import CrawlerRunner
 from scrapy.signalmanager import dispatcher

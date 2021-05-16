@@ -1,7 +1,7 @@
 import os
 from typing import List
 import torch
-from summarizer import Summarizer, TransformerSummarizer
+from summarizer import TransformerSummarizer
 from transformers import pipeline
 from transformers import PegasusForConditionalGeneration, PegasusTokenizer
 
@@ -29,7 +29,7 @@ class SummaryService:
 
         model = TransformerSummarizer(transformer_type="GPT2", transformer_model_key="gpt2-medium")
         summary = ''.join(model(body))
-        
+
         return summary
 
     def run_distill_bart_cnn(self, corpus: List[str]) -> str:

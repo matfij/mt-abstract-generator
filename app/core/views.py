@@ -12,7 +12,7 @@ from core.wrappers import is_authorized
 
 class AbstractView(GenericAPIView, CreateModelMixin):
 
-    # @key_required
+    @key_required
     def post(self, request):
         body = json.loads(request.body)
         params = GenerateAbstractParams(body)
