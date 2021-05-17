@@ -13,9 +13,17 @@ class AnswerService:
 
     @classmethod
     def generate_answer(cls, phrase: str, corpus: List[str], answer_model: AnswerModel) -> str:
-        answer = cls.run_span_bert_squad(cls, phrase, corpus) + ' ' + cls.run_electra_squad(cls, phrase, corpus)
+        bert_answer = cls.run_span_bert_squad(cls, phrase, corpus)
+        electra_answer = cls.run_electra_squad(cls, phrase, corpus)
+
+        if bert_answer in electra_answer:
+            answer = electra_answer
+        elif electra_answer in bert_answer:
+            answer = bert_answer
+        else:
+            answer = electra_answer + ' ' + bert_answer
+
         answer = answer.strip()
-        
         return answer
 
     def clear_answer(self, answer: str) -> str:
