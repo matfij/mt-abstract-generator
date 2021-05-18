@@ -1,5 +1,5 @@
 # SCRAPING
-MIN_PAGE_NUMBER = 15
+MIN_PAGE_NUMBER = 20
 MAX_PAGE_NUMBER = 50
 TAG_CONTENT = 'text()'
 XPATH_HREF_TAGS = [
@@ -13,15 +13,15 @@ XPATH_MAIN_TAGS = [
 
 # PROCESSING
 SPAN_MIN_LENGTH = 100
-CONTENT_MIN_LIMIT = 2000
-CONTENT_MAX_LIMIT = 15000
-TOTAL_CONTENT_MAX_LIMIT = 90000
+CONTENT_MIN_LIMIT = 3000
+CONTENT_MAX_LIMIT = 50000
+TOTAL_CONTENT_MAX_LIMIT = 250000
 DISALLOWED_TOKENS = [
     '//', '<<', '>>', '\\\\', '@'
 ]
 FILLER_TOKENS = [
-    u"\n", u"\t", u"\r", u"\"", "  ", "    ",
-    '+', '<', '[', ',', '>', ']', '&', '—', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
+    u"\n", u"\t", u"\r", u"\"", '  ', '\\"',
+    '+', '<', '[', '>', ']', '&', '—', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
     '--', '...', ';', ':', '^', '//', '\\'
 ]
 

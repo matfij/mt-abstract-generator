@@ -5,6 +5,7 @@ from summarizer import TransformerSummarizer
 from transformers import pipeline
 from transformers import PegasusForConditionalGeneration, PegasusTokenizer
 
+from generator import config as C
 from generator.constants import SummaryModel
 
 
@@ -12,8 +13,8 @@ class SummaryService:
     __BASE_MODEL_DIR = os.getenv('BASE_DIR') + 'generator/models/summary/'
 
     @classmethod
-    def generate_summary(cls, corpus: List[str], summary_model: SummaryModel) -> str:
-        summary = cls.run_gtp2(cls, corpus)
+    def generate_summary(cls, phrase: str, corpus: List[str], summary_model: SummaryModel) -> str:
+        summary = cls.run_gtp2(cls, phrase, corpus)
         summary = cls.clear_summary(cls, summary)
 
         return summary
@@ -24,11 +25,12 @@ class SummaryService:
 
         return summary
 
-    def run_gtp2(self, corpus: List[str]) -> str:
+    def run_gtp2(self, phrase: str, corpus: List[str]) -> str:
         body = ''.join(corpus)
+        body = phrase + ' ' + body
 
-        model = TransformerSummarizer(transformer_type="GPT2", transformer_model_key="gpt2-medium")
-        summary = ''.join(model(body))
+        model = TransformerSummarizer(transformer_type='GPT2', transformer_model_key='distilgpt2')
+        summary = ''.join(model(body, min_length=C.MIN_SUMMARY_LENGTH, max_length=C.MAX_SUMMARY_LENGTH))
 
         return summary
 
@@ -79,7 +81,7 @@ class SummaryService:
             if len(part) > min_sequence_length:
                 try:
                     text_data = [part]
-                    batch = tokenizer.prepare_seq2seq_batch(text_data, truncation=True, padding='longest', return_tensors="pt").to(torch_device)
+                    batch = tokenizer.prepare_seq2seq_batch(text_data, truncation=True, padding='longest', return_tensors='pt').to(torch_device)
                     summary_encoded = model.generate(**batch)
                     summary += ' ' + tokenizer.batch_decode(summary_encoded, skip_special_tokens=True)[0]
                 except:

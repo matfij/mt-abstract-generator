@@ -17,11 +17,11 @@ class AnswerService:
         electra_answer = cls.run_electra_squad(cls, phrase, corpus)
 
         if bert_answer in electra_answer:
-            answer = electra_answer
+            answer = cls.clear_answer(cls, electra_answer)
         elif electra_answer in bert_answer:
-            answer = bert_answer
+            answer = cls.clear_answer(cls, bert_answer)
         else:
-            answer = electra_answer + ' ' + bert_answer
+            answer = cls.clear_answer(cls, electra_answer) + ' ' + cls.clear_answer(cls, bert_answer)
 
         answer = answer.strip()
         return answer
@@ -62,7 +62,6 @@ class AnswerService:
             except:
                 pass
 
-        answer = self.clear_answer(self, answer)
         return answer
 
     def run_electra_squad(self, phrase: str, corpus: List[str]) -> str:
@@ -90,5 +89,4 @@ class AnswerService:
             except:
                 pass
 
-        answer = self.clear_answer(self, answer)
         return answer

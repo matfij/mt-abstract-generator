@@ -9,15 +9,16 @@ from generator import config as C
 class ExtractService:
 
     @classmethod
-    def extract_content(cls, corpus: List[str]) -> List[str]:
+    def extract_content(cls, phrase: str, corpus: List[str]) -> List[str]:
         model = spacy.load('en_core_web_md')
         text_rank = pytextrank.TextRank()
         model.add_pipe(text_rank.PipelineComponent, name='textrank', last=True)
+
         corpus_extract = []
 
         for part in corpus:
             part_summary = ''
-            doc = model(part)
+            doc = model(phrase + ' ' + part)
             doc_len_max = round(0.8*len(doc))
             doc_len_min = round(0.2*len(doc))
             
