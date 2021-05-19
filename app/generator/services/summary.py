@@ -14,14 +14,26 @@ class SummaryService:
 
     @classmethod
     def generate_summary(cls, phrase: str, corpus: List[str], summary_model: SummaryModel) -> str:
-        summary = cls.run_gtp2(cls, phrase, corpus)
-        summary = cls.clear_summary(cls, summary)
+        summary = cls.run_xlnet(cls, phrase, corpus)
+        summary = cls.clear_summary(cls, phrase, summary)
 
         return summary
 
-    def clear_summary(self, summary: str) -> str:
+    def clear_summary(self, phrase: str, summary: str) -> str:
         summary = summary.strip()
         summary = summary.replace('  ', ' ')
+
+        if summary.lower().startswith(phrase.lower()):
+            summary = summary[len(phrase):]
+
+        return summary
+
+    def run_xlnet(self, phrase: str, corpus: List[str]) -> str:
+        body = ''.join(corpus)
+        body = phrase + ' ' + body
+
+        model = TransformerSummarizer(transformer_type="XLNet",transformer_model_key="xlnet-base-cased")
+        summary = ''.join(model(body, min_length=C.MIN_SUMMARY_LENGTH, max_length=C.MAX_SUMMARY_LENGTH))
 
         return summary
 

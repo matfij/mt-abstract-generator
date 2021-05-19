@@ -16,9 +16,9 @@ class AnswerService:
         bert_answer = cls.run_span_bert_squad(cls, phrase, corpus)
         electra_answer = cls.run_electra_squad(cls, phrase, corpus)
 
-        if bert_answer in electra_answer:
+        if bert_answer.lower() in electra_answer.lower():
             answer = cls.clear_answer(cls, electra_answer)
-        elif electra_answer in bert_answer:
+        elif electra_answer.lower() in bert_answer.lower():
             answer = cls.clear_answer(cls, bert_answer)
         else:
             answer = cls.clear_answer(cls, electra_answer) + ' ' + cls.clear_answer(cls, bert_answer)
@@ -41,9 +41,20 @@ class AnswerService:
         tokenizer = AutoTokenizer.from_pretrained(self.__BASE_MODEL_DIR + 'spanbert-finetuned-squadv1')
         model = AutoModelForQuestionAnswering.from_pretrained(self.__BASE_MODEL_DIR + 'spanbert-finetuned-squadv1')
 
+        max_sequence_length = 3 * 512
+
+        corpus_parts = ['']
+        part_counter = 0
+        for part in corpus:
+            if len(corpus_parts[part_counter]) < max_sequence_length:
+                corpus_parts[part_counter] += part
+            else:
+                part_counter += 1
+                corpus_parts.append(part)
+
         answer = ''
         max_score = 0
-        for content in corpus:
+        for content in corpus_parts:
             try:
                 inputs = tokenizer.encode_plus(phrase, content, add_special_tokens=True, return_tensors='pt')
                 input_ids = inputs['input_ids'].tolist()[0]
@@ -68,9 +79,20 @@ class AnswerService:
         tokenizer = AutoTokenizer.from_pretrained(self.__BASE_MODEL_DIR + 'electra-small-finetuned-squadv1')
         model = AutoModelForQuestionAnswering.from_pretrained(self.__BASE_MODEL_DIR + 'electra-small-finetuned-squadv1')
 
+        max_sequence_length = 3 * 512
+        
+        corpus_parts = ['']
+        part_counter = 0
+        for part in corpus:
+            if len(corpus_parts[part_counter]) < max_sequence_length:
+                corpus_parts[part_counter] += part
+            else:
+                part_counter += 1
+                corpus_parts.append(part)
+
         answer = ''
         max_score = 0
-        for content in corpus:
+        for content in corpus_parts:
             try:
                 inputs = tokenizer.encode_plus(phrase, content, add_special_tokens=True, return_tensors='pt')
                 input_ids = inputs['input_ids'].tolist()[0]

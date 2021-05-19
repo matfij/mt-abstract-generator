@@ -34,5 +34,5 @@ AVERAGE_DOMAINS = [
     'management', 'media', 'mobi', 'tech', 'technology', 'study', 'co'
 ]
 DISALLOWED_DOMAINS = [
-    'pl'
+    'pl', 'it', 'de'
 ]
