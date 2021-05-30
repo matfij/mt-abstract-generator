@@ -55,7 +55,7 @@ class PageRatingService:
     def get_best_pages(cls, pages: List[dict]) -> List[dict]:
         for ind, page in enumerate(pages):
             if ind > 1:
-                page['quality'] -= 25 + 5*round(sqrt(ind))
+                page['quality'] -= 100 + 25*round(sqrt(ind))
 
         sorted_pages = sorted(pages, key=lambda p: p['quality'], reverse=True)
 

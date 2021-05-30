@@ -10,7 +10,7 @@ class GeneratorFacade:
 
     @classmethod
     def generate_abstract(cls, phrase: str, corpus: List[str], answer_model: AnswerModel, summary_model: SummaryModel) -> tuple:
-        corpus_extract = ExtractService.extract_content(phrase, corpus)
+        corpus_extract = ExtractService.extract_content_textrank(phrase, corpus)
 
         answer = AnswerService.generate_answer(phrase, corpus_extract, answer_model)
         summary = SummaryService.generate_summary(phrase, corpus_extract, summary_model)

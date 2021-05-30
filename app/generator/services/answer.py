@@ -17,16 +17,19 @@ class AnswerService:
         electra_answer = cls.run_electra_squad(cls, phrase, corpus)
 
         if bert_answer.lower() in electra_answer.lower():
-            answer = cls.clear_answer(cls, electra_answer)
+            answer = cls.clear_answer(cls, electra_answer, phrase)
         elif electra_answer.lower() in bert_answer.lower():
-            answer = cls.clear_answer(cls, bert_answer)
+            answer = cls.clear_answer(cls, bert_answer, phrase)
         else:
-            answer = cls.clear_answer(cls, electra_answer) + ' ' + cls.clear_answer(cls, bert_answer)
+            answer = cls.clear_answer(cls, electra_answer, phrase) + ' ' + cls.clear_answer(cls, bert_answer, phrase)
 
         answer = answer.strip()
         return answer
 
-    def clear_answer(self, answer: str) -> str:
+    def clear_answer(self, answer: str, phrase: str) -> str:
+        if phrase.lower() in answer.lower():
+            answer = answer[len(phrase):]
+
         for token in self.__DISALLOWED_TOKENS:
             answer = answer.replace(token, '')
         answer = answer.strip()

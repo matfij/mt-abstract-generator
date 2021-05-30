@@ -2,6 +2,7 @@ import os
 from typing import List
 import spacy
 import pytextrank
+# from lexrank import STOPWORDS, LexRank
 
 from generator import config as C
 
@@ -9,7 +10,7 @@ from generator import config as C
 class ExtractService:
 
     @classmethod
-    def extract_content(cls, phrase: str, corpus: List[str]) -> List[str]:
+    def extract_content_textrank(cls, phrase: str, corpus: List[str]) -> List[str]:
         model = spacy.load('en_core_web_md')
         text_rank = pytextrank.TextRank()
         model.add_pipe(text_rank.PipelineComponent, name='textrank', last=True)
@@ -34,6 +35,28 @@ class ExtractService:
             cls.save_data(cls, corpus, corpus_extract)
 
         return corpus_extract
+
+    # @classmethod
+    # def extract_content_lexrank(cls, phrase: str, corpus: List[str]) -> List[str]:
+    #     documents = [[page] for page in corpus]
+    #     lxr = LexRank(documents, stopwords=STOPWORDS['en'])
+
+    #     extracted_sentences = lxr.get_summary(corpus, summary_size=100)
+    #     extracted_scores = lxr.rank_sentences(corpus)[:100]
+
+    #     corpus_flat = ''.join(corpus)
+    #     extract = [{'sentence': sentence, 'ind': corpus_flat.index(sentence)} for sentence in extracted_sentences]
+
+    #     sorted_extract = sorted(extract, key=lambda p: p['ind'])
+
+    #     corpus_extract = ['']
+    #     for part in sorted_extract:
+    #         try:
+    #             corpus_extract[0] += part['sentence']
+    #         except:
+    #             pass
+
+    #     return corpus_extract
 
     def save_data(self, pages: List[str], abstracts: List[str]):
         with open('extracts.json', 'w') as file:

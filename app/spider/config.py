@@ -13,7 +13,7 @@ XPATH_MAIN_TAGS = [
 
 # PROCESSING
 SPAN_MIN_LENGTH = 100
-CONTENT_MIN_LIMIT = 3000
+CONTENT_MIN_LIMIT = 2000
 CONTENT_MAX_LIMIT = 50000
 TOTAL_CONTENT_MAX_LIMIT = 250000
 DISALLOWED_TOKENS = [
@@ -21,7 +21,7 @@ DISALLOWED_TOKENS = [
 ]
 FILLER_TOKENS = [
     u"\n", u"\t", u"\r", u"\"", '  ', '\\"',
-    '+', '<', '[', '>', ']', '&', '—', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
+    '+', '<', '[', '>', ']', '&', '}', '{', '|', '‘', '=', '~', '(', '/', '~', ')', '..', '@', '#', '$', '*', ',,',
     '--', '...', ';', ':', '^', '//', '\\'
 ]
 
