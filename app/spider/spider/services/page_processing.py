@@ -15,7 +15,7 @@ class PageProcessingSerive:
         for ref in references:
             ref_body = cls.get_url_body(ref)
             if ref_body is not None and url_body is not None and 'http' in ref:
-                if url_body not in ref and ref_body not in url:
+                if not any(item in ref.split('.') for item in url_body.split('.')):
                     valid_references.append(ref)
 
         return valid_references
