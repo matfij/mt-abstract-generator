@@ -13,7 +13,7 @@ services:
       python3 manage.py makemigrations &&
       python3 manage.py migrate core &&
       python3 manage.py migrate polls &&
-      gunicorn api.wsgi -b 0.0.0.0:${PORT} ${GUNICORN_CMD_ARGS}"
+      gunicorn app.wsgi -b 0.0.0.0:${PORT} ${GUNICORN_CMD_ARGS}"
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - ADMIN_KEY=${ADMIN_KEY}

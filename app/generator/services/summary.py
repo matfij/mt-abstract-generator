@@ -14,7 +14,7 @@ class SummaryService:
 
     @classmethod
     def generate_summary(cls, phrase: str, corpus: List[str], summary_model: SummaryModel) -> str:
-        summary = cls.run_xlnet(cls, phrase, corpus)
+        summary = cls.run_gtp2(cls, phrase, corpus)
         summary = cls.clear_summary(cls, phrase, summary)
 
         return summary
