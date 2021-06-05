@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.test.testcases import QuietWSGIRequestHandler
 from spider.spider.services.page_processing import PageProcessingSerive
 
 
