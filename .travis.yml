@@ -9,3 +9,14 @@ before_script: pip install docker-compose
 
 script:
   - docker-compose run --rm api sh -c "python3 manage.py test"
+
+env:
+  - SECRET_KEY=s92,*Ny*wY-J9]zN
+  - ADMIN_KEY=$@4q@,.RKy/S(*x'
+  - DEBUG=0
+  - WRITE_FILES=0
+  - ALLOWED_HOSTS=*
+  - PORT=8000
+  - CRYPTOGRAPHY_DONT_BUILD_RUST=1
+  - BASE_DIR=
+  - GUNICORN_CMD_ARGS=
