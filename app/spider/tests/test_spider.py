@@ -12,7 +12,7 @@ class SpiderTests(TestCase):
         self.base_dir = 'spider/tests/html/'
 
     def test_spider_parsing(self):
-        with open(self.base_dir + 'test-website-1.html') as file: body = file.read()
+        with open(self.base_dir + 'test-website-1.txt') as file: body = file.read()
         response = TextResponse(
             url='https://www.healthline.com/nutrition/',
             body=body,
