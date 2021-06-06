@@ -3,8 +3,7 @@ language: python
 python:
   - "3.8"
 
-cache: 
-  timeout: 1000
+cache:
   - pip
 
 services:
