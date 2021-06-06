@@ -32,6 +32,7 @@ class GeneratorTests(TestCase):
             self.assertGreater(len(extract), C.MIN_CONTENT_LENGTH)
             self.assertLess(len(extract), C.MAX_CONTENT_LENGTH)
 
+    @skipIf(True, 'Memory intensive')
     def test_question_answering(self):
         phrase = 'What is microkernel architecture?'
         corpus = [page['text'] for page in self.extracts]
