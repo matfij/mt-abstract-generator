@@ -39,5 +39,6 @@ class KeyModel(Model):
     tester_class = IntegerField(default=1, null=True)
     active = BooleanField(default=True)
     creation_date = DateTimeField(default=timezone.now)
+    last_used = DateTimeField(blank=True, default=None, null=True)
     use_count = IntegerField(default=0)
     use_limit = IntegerField(default=10)

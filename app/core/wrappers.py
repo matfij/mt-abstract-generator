@@ -1,6 +1,7 @@
 import os
-from rest_framework.response import Response
+from django.utils import timezone
 from rest_framework import status
+from rest_framework.response import Response
 
 from core.models import KeyModel
 from core.serializers import KeySerializer
@@ -30,6 +31,8 @@ def key_required(func):
             key['use_count'] = key['use_count'] + 1
             if key['use_count'] > key['use_limit']:
                 key['active'] = False
+
+            key['last_used'] = timezone.now()
 
             serializer = KeySerializer(key_object, data=key)
             if serializer.is_valid():
